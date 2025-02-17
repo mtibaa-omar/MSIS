@@ -16,7 +16,7 @@ function AppTheme(props) {
       ? {}
       : createTheme({
           cssVariables: {
-            colorSchemeSelector: "data-mui-color-scheme",
+            colorSchemeSelector: "class",
             cssVarPrefix: "template",
           },
           palette: {

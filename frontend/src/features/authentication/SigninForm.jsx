@@ -12,25 +12,24 @@ import ForgotPassword from "./ForgotPassword";
 import styled from "styled-components";
 
 import { useForm } from "react-hook-form";
-import { useDarkMode } from "../../context/DarkModeContext";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
+import { Link as MuiLink, useTheme } from "@mui/material";
 import { useLogin } from "./useLogin";
-import FormContainer from "../../ui/Form";
+import FormContainer from "../../ui/FormContainer";
 import Card from "../../ui/Card";
 
 const StyledBox = styled.div`
   background: ${({ theme }) =>
-    theme.darkMode === "dark"
+    theme.palette.mode === "dark"
       ? "linear-gradient(135deg, #1f2937 50%, #fff 50%)"
       : "linear-gradient(315deg, #3b82f6 50%, #fff 50%)"};
 `;
 export default function SignIn() {
   const [open, setOpen] = useState(false);
-  const { darkMode } = useDarkMode();
+  const theme = useTheme();
   const { isLoggingIn, login } = useLogin();
   const navigate = useNavigate();
   const {
@@ -49,12 +48,12 @@ export default function SignIn() {
   const onSubmit = (data) => {
     login(data, {
       onSuccess: () => {
-        navigate("/", { replace: true });
+        navigate("/");
       },
     });
   };
   return (
-    <StyledBox theme={{ darkMode }}>
+    <StyledBox theme={theme}>
       <CssBaseline enableColorScheme />
       <FormContainer direction="column" justifyContent="space-between">
         <Card variant="outlined" sx={{ marginTop: "2rem" }}>

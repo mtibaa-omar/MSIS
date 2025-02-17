@@ -1,37 +1,88 @@
-import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
-import { useDarkMode } from "../context/DarkModeContext";
-import { MenuItem, Select, useColorScheme } from "@mui/material";
-import { LuSunMoon } from "react-icons/lu";
+import { Box, IconButton, Menu, MenuItem, useColorScheme } from "@mui/material";
+import DarkModeIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeIcon from "@mui/icons-material/LightModeRounded";
+import { useEffect, useState } from "react";
 
 export default function DarkMode(props) {
-  const { setDarkMode } = useDarkMode();
-
-  const { mode, setMode } = useColorScheme();
+  const { mode, systemMode, setMode } = useColorScheme();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleMode = (targetMode) => () => {
+    setMode(targetMode);
+    handleClose();
+  };
   if (!mode) {
-    return null;
+    <Box
+      data-screenshot="toggle-mode"
+      sx={(theme) => ({
+        verticalAlign: "bottom",
+        display: "inline-flex",
+        width: "2.25rem",
+        height: "2.25rem",
+        borderRadius: (theme.vars || theme).shape.borderRadius,
+        border: "1px solid",
+        borderColor: (theme.vars || theme).palette.divider,
+      })}
+    />;
   }
+  const resolvedMode = systemMode || mode;
+  useEffect(() => {
+    if (mode === "system" && systemMode) {
+      setMode(systemMode);
+    }
+  }, [mode, systemMode, setMode]);
+  const icon = {
+    light: <LightModeIcon />,
+    dark: <DarkModeIcon />,
+  }[resolvedMode];
   return (
-    <Select
-      value={mode}
-      onChange={(event) => {
-        setMode(event.target.value);
-        setDarkMode(event.target.value);
-      }}
-      SelectDisplayProps={{
-        "data-screenshot": "toggle-mode",
-      }}
-      {...props}
-    >
-      <MenuItem value="system">
-        <LuSunMoon size={20} /> &nbsp; System
-      </MenuItem>
-      <MenuItem value="light">
-        <HiOutlineSun size={20} /> &nbsp;Light
-      </MenuItem>
-      <MenuItem value="dark">
-        <HiOutlineMoon size={18} />
-        &nbsp; Dark
-      </MenuItem>
-    </Select>
+    <>
+      <IconButton
+        data-screenshot="toggle-mode"
+        onClick={handleClick}
+        disableRipple
+        size="small"
+        aria-controls={open ? "color-scheme-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        {...props}
+      >
+        {icon}
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        slotProps={{
+          paper: {
+            variant: "outlined",
+            elevation: 0,
+            sx: {
+              my: "4px",
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem selected={mode === "system"} onClick={handleMode("system")}>
+          System
+        </MenuItem>
+        <MenuItem selected={mode === "light"} onClick={handleMode("light")}>
+          Light
+        </MenuItem>
+        <MenuItem selected={mode === "dark"} onClick={handleMode("dark")}>
+          Dark
+        </MenuItem>
+      </Menu>
+    </>
   );
 }

@@ -1,6 +1,16 @@
-function Button({ children, variation, onClick, ...props }) {
+function Button({
+  children,
+  variation = "primary",
+  onClick,
+  className,
+  ...props
+}) {
   return (
-    <button className={variation} onClick={onClick} {...props}>
+    <button
+      className={`${variation} ${className || ""}`}
+      onClick={onClick}
+      {...props}
+    >
       {children}
     </button>
   );

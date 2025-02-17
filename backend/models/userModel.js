@@ -20,17 +20,9 @@ const userSchema = new mongoose.Schema(
     },
     avatar: { type: String, default: "" },
     mobile: { type: Number, default: null },
-    refreshToken: {
-      type: Number,
-      default: "",
-    },
     verifyEmail: {
       type: Boolean,
       default: false,
-    },
-    lastLoginDate: {
-      type: Date,
-      default: "",
     },
     status: {
       type: String,

@@ -40,7 +40,7 @@
 <!-- Screenshot -->
 <a align="center" href="https://www.msis-tn.tech">
   
-  ![Screenshot](./public/msis-preview.png)
+  ![Screenshot](./msis-preview.png)
   
 </a>
 

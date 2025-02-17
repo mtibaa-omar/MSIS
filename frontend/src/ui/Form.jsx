@@ -1,27 +1,26 @@
-import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
+import clsx from "clsx";
+import { forwardRef } from "react";
 
-const FormContainer = styled(Stack)(({ theme }) => ({
-  height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
-  minHeight: "100%",
-  padding: theme.spacing(2),
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4),
-  },
-  "&::before": {
-    content: '""',
-    display: "block",
-    position: "absolute",
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
-    backgroundRepeat: "no-repeat",
-    ...theme.applyStyles("dark", {
-      backgroundImage:
-        "radial-gradient(at 50% 50%, hsla(220, 30%, 5%, 0.5), hsl(220, 30%, 5%))",
-    }),
-  },
-}));
+const Form = forwardRef(({ type, children, ...props }, ref) => {
+  const formClasses = clsx(
+    "overflow-hidden text-sm",
+    {
+      "p-6 bg-[rgb(55, 65, 81)] border-gray-200 rounded-md text-gray-700 dark:text-white  ":
+        type !== "modal",
+    },
+    {
+      "sm:max-w-sm sm:w-3/4 md:max-w-max lg:w-[65rem] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-[#434343] shadow-xl p-4 rounded-lg dark:bg-[#121212] dark:border-[#434343] text-gray-700 dark:text-white":
+        type === "modal",
+    }
+  );
 
-export default FormContainer;
+  return (
+    <form className={formClasses} ref={ref} {...props}>
+      {children}
+    </form>
+  );
+});
+
+Form.displayName = "Form";
+
+export default Form;

@@ -11,6 +11,11 @@ import userRoutes from "./routes/userRoutes.js";
 import globalErrorHandler from "./controllers/errorController.js";
 import AppError from "./utils/appError.js";
 import ExpressMongoSanitize from "express-mongo-sanitize";
+import uploadRouter from "./routes/uploadRoute.js";
+import categoryRouter from "./routes/categoryRoutes.js";
+import subcategoryRouter from "./routes/subCategoryRoutes.js";
+import productRouter from "./routes/productRoutes.js";
+
 const app = express();
 
 // MIDDELWARES
@@ -51,7 +56,11 @@ app.use(hpp());
 app.use(compression());
 
 // Routes
-app.use("/api/v1/users", userRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/file", uploadRouter);
+app.use("/api/categories", categoryRouter);
+app.use("/api/subcategories", subcategoryRouter);
+app.use("/api/products", productRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server!`, 404));

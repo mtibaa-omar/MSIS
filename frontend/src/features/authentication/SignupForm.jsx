@@ -12,24 +12,23 @@ import styled from "styled-components";
 
 import { FcGoogle } from "react-icons/fc";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useDarkMode } from "../../context/DarkModeContext";
 import { useForm } from "react-hook-form";
-import { Link as MuiLink } from "@mui/material";
+import { Link as MuiLink, useTheme } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "./useSignup";
-import FormContainer from "../../ui/Form";
+import FormContainer from "../../ui/FormContainer";
 import Card from "../../ui/Card";
 
 const StyledBox = styled.div`
   background: ${({ theme }) =>
-    theme.darkMode === "dark"
+    theme.palette.mode === "dark"
       ? "linear-gradient(135deg, #1f2937 50%, #fff 50%)"
       : "linear-gradient(315deg, #3b82f6 50%, #fff 50%)"};
 `;
 
 function SignupForm() {
-  const { darkMode } = useDarkMode();
   const { signup, isSigninUp } = useSignup();
+  const theme = useTheme();
   console.log(isSigninUp);
   const navigate = useNavigate();
   const {
@@ -42,7 +41,7 @@ function SignupForm() {
   }
 
   return (
-    <StyledBox theme={{ darkMode }}>
+    <StyledBox theme={theme}>
       <CssBaseline enableColorScheme />
       <FormContainer direction="column" justifyContent="space-between">
         <Card variant="outlined" sx={{ marginTop: "2rem" }}>
@@ -122,7 +121,10 @@ function SignupForm() {
 
           <Divider>
             <Typography
-              sx={{ color: darkMode === "dark" ? "#fff" : "text.secondary" }}
+              sx={{
+                color:
+                  theme.palette.mode === "dark" ? "#fff" : "text.secondary",
+              }}
             >
               or
             </Typography>

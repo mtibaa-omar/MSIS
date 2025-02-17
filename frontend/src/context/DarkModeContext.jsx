@@ -5,7 +5,6 @@ const DarkModeContext = createContext();
 
 function DarkModeProvider({ children }) {
   const [darkMode, setDarkMode] = useLocalStorageState("system", "darkMode");
-
   useEffect(() => {
     if (darkMode === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");

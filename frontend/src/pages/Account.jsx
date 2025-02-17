@@ -1,7 +1,7 @@
 import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
 import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
 import Row from "../ui/Row";
-import FormContainer from "../ui/Form";
+import FormContainer from "../ui/FormContainer";
 import { Typography } from "@mui/material";
 
 function Account() {

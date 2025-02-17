@@ -1,3 +1,5 @@
+import flowbite from "flowbite-react/tailwind";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -11,7 +13,11 @@ export default {
         "dark-primary-100": "#374151",
         customBg: "#3b82f6",
       },
+      fontFamily: {
+        robotoMono: ["'Roboto Mono'", "monospace"],
+        poppins: ["'Poppins'", "sans-serif"],
+      },
     },
   },
-  plugins: [],
+  plugins: [flowbite],
 };

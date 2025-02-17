@@ -20,7 +20,7 @@ function AppLayout() {
             showSidebar ? "lg:ml-96" : "lg:pl-24"
           )}
         >
-          <div className="max-w-full py-6 mx-auto sm:max-w-screen-md xl:max-w-screen-xl ">
+          <div className="max-w-full py-6 mx-auto min-h-svh sm:max-w-screen-md xl:max-w-screen-xl">
             <Outlet />
           </div>
         </main>
