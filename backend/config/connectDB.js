@@ -6,7 +6,7 @@ if (!process.env.MONGODB_URI) {
   throw new Error("Please provide a MONGODB_URI in the .env file");
 }
 const DB = process.env.MONGODB_URI.replace(
-  "<PASSWORD>",
+  "PASSWORD",
   process.env.DATABASE_PASSWORD
 );
 async function connectDB() {
