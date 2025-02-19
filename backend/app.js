@@ -24,7 +24,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ✅ Middleware Setup
+// Middleware Setup
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
 app.use(
@@ -36,53 +36,54 @@ app.use(
 
 app.use(cookieParser());
 
-// ✅ Rate Limiting (Prevent DDoS Attacks)
+// Rate Limiting (Prevent DDoS Attacks)
 const limiter = rateLimit({
   max: 250,
-  windowMs: 60 * 60 * 1000, // 1 hour
+  windowMs: 60 * 60 * 1000, 
   message: "Too many requests from this IP, please try again later.",
 });
 app.use(limiter);
 
-// ✅ Logging (Only in Development Mode)
+// Logging (Only in Development Mode)
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// ✅ Body Parsing (Limits Request Size)
+// Body Parsing (Limits Request Size)
 app.use(express.json({ limit: "10kb" }));
 
-// ✅ Data Sanitization Against NoSQL Injection
+// Data Sanitization Against NoSQL Injection
 app.use(mongoSanitize());
 
-// ✅ Prevent HTTP Parameter Pollution
+// Prevent HTTP Parameter Pollution
 app.use(hpp());
 
-// ✅ Enable Response Compression
+// Enable Response Compression
 app.use(compression());
 
-// ✅ Routes
+// Routes
 app.use("/api/users", userRoutes);
 app.use("/api/file", uploadRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/subcategories", subcategoryRouter);
 app.use("/api/products", productRouter);
 
-// ✅ Serve Frontend in Production Mode
+// Serve Frontend in Production Mode
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
   });
 }
 
-// ✅ Handle Undefined Routes
+
+// Handle Undefined Routes
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// ✅ Global Error Handling
+// Global Error Handling
 app.use(globalErrorHandler);
 
 export default app;
