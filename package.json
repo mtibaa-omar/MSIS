@@ -1,0 +1,12 @@
+{
+    "name": "msis",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+      "install-client": "npm install --prefix frontend",
+      "install-server": "npm install --prefix backend",
+      "start": "node backend/index.js",
+      "heroku-postbuild": "npm install --prefix frontend && npm run build --prefix frontend"
+    }
+  }
+  
