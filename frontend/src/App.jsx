@@ -18,6 +18,12 @@ import OrdersPage from "./pages/Orders";
 import ProtectAdmin from "./ui/ProtectAdmin";
 import Products from "./pages/Products";
 import UploadProduct from "./pages/UploadProduct";
+import GlobalStyles from "./styles/GlobalStyles";
+import ProductsHome from "./pages/ProductsHome";
+import Cart from "./features/cart/Cart";
+import ProductsSearch from "./pages/ProductsSearch";
+import ProductDetails from "./features/products/ProductDetails";
+import DashboardHome from "./pages/DashboardHome";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +37,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
+      <GlobalStyles />
       <AppTheme>
         <BrowserRouter>
           <Routes>
@@ -41,8 +48,14 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route path="/" element={<Home />} />
+              <Route path="products/:slug" element={<ProductsHome />} />
+              <Route
+                path="products/search/:query"
+                element={<ProductsSearch />}
+              />
+              <Route path="product/:id" element={<ProductDetails />} />
               <Route path="/account" element={<Account />} />
+              <Route path="/cart" element={<Cart />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
 
@@ -54,14 +67,14 @@ function App() {
                 </ProtectAdmin>
               }
             >
-              <Route index element={<CategoryPage />} />
+              <Route index element={<DashboardHome />} />
               <Route path="category" element={<CategoryPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="subcategory" element={<SubCategoryPage />} />
               <Route path="product" element={<Products />} />
               <Route path="upload-product" element={<UploadProduct />} />
             </Route>
-
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
@@ -78,6 +91,8 @@ function App() {
           pauseOnHover
           className="fixed max-w-xs transform -translate-x-1/2 pointer-events-auto top-20 left-1/2 sm:top-4 sm:max-w-md"
           theme="light"
+          bodyClassName="font-sans text-sm"
+          progressClassName="rounded"
         />
       </AppTheme>
     </QueryClientProvider>

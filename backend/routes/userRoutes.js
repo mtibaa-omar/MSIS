@@ -37,7 +37,7 @@ router.patch("/updateMyPassword", protect, updatePassword);
 router.patch("/updateMe", protect, updateMe);
 router.delete("/deleteMe", protect, deleteMe);
 
-router.post("/verifyEmail", verifyEmail);
+router.get("/verifyEmail/:code", verifyEmail);
 router
   .route("/")
   .get(protect, getAllUsers)

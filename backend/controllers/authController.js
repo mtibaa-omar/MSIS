@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { promisify } from "util";
 import crypto from "crypto";
 import { verifyEmailTemplate } from "./../utils/verifyEmailTemplate.js";
+import { forgotPasswordTemplate } from "../utils/forgotPasswordTemplate.js";
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -45,21 +46,22 @@ export const signup = catchAsync(async (req, res, next) => {
     role: req.body.role,
   });
 
-  const verificationURL = `${req.protocol}://${req.get("host")}/api/v1/users/verifyEmail/?code=${newUser._id}`;
+  const verificationURL = `${req.protocol}://${req.get("host")}/api/users/verifyEmail/${newUser._id}`;
+
   await sendEmail({
     email: newUser.email,
     subject: "Verification",
-    message: "verify",
     html: verifyEmailTemplate({
       actionUrl: verificationURL,
       name: req.body.name,
     }),
   });
+
   createSendToken(newUser, 201, res);
 });
 export const verifyEmail = catchAsync(async (req, res, next) => {
-  const code = req.query.code;
-  console.log(code);
+  console.log("ee");
+  const code = req.params.code;
   const user = await User.findById(code);
 
   if (!user) next(new AppError("Invalid User"));
@@ -149,15 +151,15 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createForgotPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get("host")}/api/v1/users/resetPassword/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get("host")}/api/users/resetPassword/${resetToken}`;
 
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+  const message = forgotPasswordTemplate(resetURL);
 
   try {
     await sendEmail({
       email: user.email,
-      subject: "Your password reset token (valid for 10 min)",
-      message,
+      subject: "Reset Your Password",
+      html: message,
     });
     res.status(200).json({
       status: "success",

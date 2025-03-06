@@ -1,3 +1,4 @@
+import Category from "../models/categoryModel.js";
 import SubCategory from "../models/subCategoryModel.js";
 import catchAsync from "../utils/catchAsync.js";
 
@@ -26,6 +27,41 @@ export const getSubCategories = catchAsync(async (req, res, next) => {
   return res.status(200).json(data);
 });
 
+export const getCategoriesWithSubCategories = catchAsync(
+  async (req, res, next) => {
+    const categories = await Category.find();
+
+    const categoriesWithSubs = await Promise.all(
+      categories.map(async (cat) => {
+        const subcategories = await SubCategory.find({ category: cat._id });
+        return {
+          ...cat.toObject(),
+          subcategories,
+        };
+      })
+    );
+    res.status(200).json(categoriesWithSubs);
+  }
+);
+
+export const updateSubCategory = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  const { id: SubCategoryId } = req.params;
+  const { name, image, category } = req.body;
+  const updatedCategory = await SubCategory.updateOne(
+    {
+      _id: SubCategoryId,
+    },
+    {
+      name,
+      image,
+      category,
+    }
+  );
+  return res.status(204).json({
+    message: "Updated Category",
+  });
+});
 export const deleteSubCategory = catchAsync(async (req, res, next) => {
   const { id: SubCategoryId } = req.params;
 

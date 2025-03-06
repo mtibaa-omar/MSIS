@@ -31,7 +31,6 @@ function CreateCategoryForm({ open, categoryToEdit = {}, closeModal }) {
     }
     if (isEditSession) {
       if (image.length > 0) {
-        // Upload new image if changed
         uploadImage(formData, {
           onSuccess: (data) => {
             editCategory(

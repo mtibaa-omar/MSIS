@@ -48,10 +48,28 @@ export const getSubCategories = async () => {
   });
   return response.data;
 };
+export const fetchCategoriesWithSubcategories = async () => {
+  const response = await axiosInstance({
+    ...apiRoutes.getCategoriesWithSubCategories,
+  });
+  return response.data;
+};
+export const updateSubCategory = async (id, categoryData) => {
+  const url = apiRoutes.updateSubCategory.url.replace(":id", id);
+  console.log(url);
+  console.log(categoryData);
+  const response = await axiosInstance({
+    ...apiRoutes.updateSubCategory,
+    url,
+    data: categoryData,
+  });
+  return response;
+};
+
 export const deleteSubCategory = async ({ categoryId }) => {
   const url = apiRoutes.deleteSubCategory.url.replace(":id", categoryId);
   const response = await axiosInstance({
-    method: apiRoutes.deleteSubCategory.method,
+    ...apiRoutes.deleteSubCategory,
     url,
   });
   return response;

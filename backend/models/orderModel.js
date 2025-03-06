@@ -13,21 +13,13 @@ const orderSchema = new mongoose.Schema(
       ref: "Product",
     },
     productDetails: { name: String, image: String },
-    paymentId: {
-      type: String,
-      default: "",
-    },
     payment_status: {
       type: String,
       default: "",
     },
-    delivery_address: {
+    address: {
       type: mongoose.Schema.ObjectId,
       ref: "address",
-    },
-    subTotalAmt: {
-      type: Number,
-      default: 0,
     },
     totalAmt: {
       type: Number,

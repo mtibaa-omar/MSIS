@@ -17,5 +17,6 @@ export function useUser() {
     isLoading,
     user,
     isAuthenticated: user?.role,
+    isAdmin: user?.role === "ADMIN",
   };
 }

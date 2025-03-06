@@ -61,92 +61,11 @@ export const allCategories = [
         category: "SERVEURS",
         items: ["Serveurs", "Station de Travail"],
       },
-      {
-        category: "BUREAUTIQUE",
-        items: ["Calculatrices"],
-      },
+      
     ],
   },
   {
     category: "IMPRESSION",
-    data: [
-      {
-        category: "IMPRIMANTES",
-        items: [
-          "Imprimante à réservoir intégré",
-          "Imprimante jet d'encre",
-          "Imprimante et Multifonction Laser",
-          "Imprimante à ticket",
-          "Imprimante Matricielle",
-          "Imprimante Portable",
-          "Imprimante Photo",
-          "Imprimante Art Graphique",
-        ],
-      },
-      {
-        category: "CONSOMMABLES",
-        items: ["Cartouche", "Bouteille D'encre", "Toner"],
-      },
-      {
-        category: "ACCESSOIRES",
-        items: ["Câble USB", "PAPIER"],
-      },
-      {
-        category: "SCANNERS",
-        items: ["Scanner à plat"],
-      },
-      {
-        category: "PHOTOCOPIEUR COULEUR",
-        items: ["Photocopieurs"],
-      },
-      {
-        category: "FOURNITURE DE BUREAU",
-        items: ["Perforleieuses", "Destructeur de documents", "Plastifieuses"],
-      },
-    ],
-  },
-
-  {
-    category: "GAMING",
-    data: [
-      {
-        category: "IMPRIMANTES",
-        items: [
-          "Imprimante à réservoir intégré",
-          "Imprimante jet d'encre",
-          "Imprimante et Multifonction Laser",
-          "Imprimante à ticket",
-          "Imprimante Matricielle",
-          "Imprimante Portable",
-          "Imprimante Photo",
-          "Imprimante Art Graphique",
-        ],
-      },
-      {
-        category: "CONSOMMABLES",
-        items: ["Cartouche", "Bouteille D'encre", "Toner"],
-      },
-      {
-        category: "ACCESSOIRES",
-        items: ["Câble USB", "PAPIER"],
-      },
-      {
-        category: "SCANNERS",
-        items: ["Scanner à plat"],
-      },
-      {
-        category: "PHOTOCOPIEUR COULEUR",
-        items: ["Photocopieurs"],
-      },
-      {
-        category: "FOURNITURE DE BUREAU",
-        items: ["Perforleieuses", "Destructeur de documents", "Plastifieuses"],
-      },
-    ],
-  },
-
-  {
-    category: "ROBOTIQUES",
     data: [
       {
         category: "IMPRIMANTES",

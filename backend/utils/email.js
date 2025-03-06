@@ -11,10 +11,10 @@ const sendEmail = async (options) => {
   });
 
   const mailOptions = {
-    from: "MSIS <Msis@test.te>",
+    from: "MSIS <msistunisia@gmail.com>",
     to: options.email,
     subject: options.subject,
-    text: options.message,
+    text: "MSIS",
     html: options.html,
   };
   console.log(mailOptions);

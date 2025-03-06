@@ -22,6 +22,8 @@ import FormContainer from "../../ui/FormContainer";
 import Card from "../../ui/Card";
 
 const StyledBox = styled.div`
+ height: 100vh;  
+ width: 100%;
   background: ${({ theme }) =>
     theme.palette.mode === "dark"
       ? "linear-gradient(135deg, #1f2937 50%, #fff 50%)"

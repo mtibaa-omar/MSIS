@@ -16,6 +16,7 @@ const apiRoutes = {
     url: `/api/subcategories`,
   },
   getSubCategories: { method: "GET", url: `/api/subcategories` },
+  updateSubCategory: { method: "PUT", url: `/api/subcategories/:id` },
   deleteSubCategory: { method: "DELETE", url: `/api/subcategories/:id` },
   createProduct: {
     method: "POST",
@@ -24,6 +25,18 @@ const apiRoutes = {
   getProducts: {
     method: "GET",
     url: `/api/products`,
+  },
+  getProduct: {
+    method: "GET",
+    url: `/api/products/product/:id`,
+  },
+  getProductsBySubCategory: {
+    method: "GET",
+    url: `/api/products/:slug`,
+  },
+  getCategoriesWithSubCategories: {
+    method: "GET",
+    url: `/api/subcategories/test`,
   },
 };
 

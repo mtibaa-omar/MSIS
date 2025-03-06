@@ -74,8 +74,8 @@ function CreateProductForm() {
           },
           {
             onSuccess: () => {
-              reset();
-              removeMoreDetails();
+              // reset();
+              // removeMoreDetails();
               removeImage();
             },
             onError: (error) => {

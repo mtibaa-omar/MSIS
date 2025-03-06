@@ -16,8 +16,10 @@ function Sidebar() {
       <aside
         className={`fixed top-0 w-64 lg:w-96 h-screen pt-24 z-30 transition-transform ${
           isSidebarOpen ? "translate-x-0 " : "-translate-x-full"
-        } bg-primary-200 border-x lg:translate-x-0 dark:bg-dark-primary-200 dark:border-gray-900 border-gray-100`}
-      ></aside>
+        } bg-primary-200 border-x-2 lg:translate-x-0 dark:bg-[#121212] dark:border-[#030712] border-gray-100`}
+      >
+        <h1 className="p-4 text-2xl font-bold">Filtrer</h1>
+      </aside>
 
       {isSidebarOpen && (
         <div

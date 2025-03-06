@@ -1,5 +1,7 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
+import slugify from "slugify";
 
 function NavItem({ field, products }) {
   return (
@@ -10,31 +12,34 @@ function NavItem({ field, products }) {
       </PopoverButton>
 
       <PopoverPanel
-        className="absolute z-10 w-screen mt-3 overflow-hidden transform -translate-x-1/2 bg-white border border-[#2B3040] shadow-lg max-w-[1300px] left-1/2 rounded-xl dark:bg-primary-100"
+        className="absolute z-10 w-screen mt-5 overflow-hidden transform -translate-x-1/2 bg-white border-2 border-[#030712] shadow-lg max-w-[500px] left-1/2 rounded-xl dark:bg-[#121212]"
         modal="false"
       >
-        <div className="flex flex-wrap gap-6 p-6">
-          {products.map((category, index) => (
-            <div
-              key={index}
-              className={`flex-1 basis-[calc(100%/3-16px)] max-w-[calc(100%/3-16px)] space-y-3 
+        <div className="p-6">
+          <div
+            key={products.name}
+            className={`flex-1 basis-[calc(100%/3-16px)]  space-y-3 
               }`}
-            >
-              <h3 className="text-base font-semibold text-gray-900 uppercase dark:text-white">
-                {category.category}
-              </h3>
-              <ul className="space-y-1">
-                {category.items.map((item, subIndex) => (
-                  <li
+          >
+            <h3 className="text-base font-semibold text-gray-900 uppercase dark:text-gray-50">
+              {products.name}
+            </h3>
+            <div className="flex flex-col">
+              {products?.subcategories?.map((item, subIndex) => {
+                const slug = slugify(item.name, { lower: true });
+
+                return (
+                  <Link
                     key={subIndex}
-                    className="text-sm text-gray-700 dark:text-gray-300 hover:underline"
+                    to={`products/${slug}`}
+                    className="text-sm text-gray-700 dark:text-gray-100 hover:underline"
                   >
-                    <a href="#">{item}</a>
-                  </li>
-                ))}
-              </ul>
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
-          ))}
+          </div>
         </div>
       </PopoverPanel>
     </Popover>

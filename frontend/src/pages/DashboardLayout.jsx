@@ -26,7 +26,7 @@ const StyledHeader = styled.header`
 `;
 
 function AppLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { mode } = useColorScheme();
   const handleClick = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -36,7 +36,7 @@ function AppLayout() {
     <div className="flex flex-col min-h-screen bg-primary-100 dark:bg-[#121212]">
       <StyledHeader $darkMode={mode === "dark" ? true : false}>
         <ButtonIcon onClick={handleClick}>
-          {isSidebarOpen ? <MenuIcon /> : <MenuOpenIcon />}
+          {!isSidebarOpen ? <MenuIcon /> : <MenuOpenIcon />}
         </ButtonIcon>
         <Link to="/" className="flex items-center">
           <img src="/logo.png" alt="MSIS logo" className="w-10" />

@@ -3,27 +3,27 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Button from "./Button";
 import { FaExclamationTriangle } from "react-icons/fa";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: {
-    xs: 400,
-    sm: 450,
-  },
-  bgcolor: "#1f2937",
-  color: "white",
-  border: "2px solid #2B3040",
-  borderRadius: 2,
-  boxShadow: 24,
-  p: "1.2rem",
-};
+import { useColorScheme } from "@mui/material";
 
 export default function ConfirmDelete({ handleClose, deleteFct, isDeleting }) {
-  document.body.style.overflow = "hidden";
-
+  const { mode } = useColorScheme();
+  const isDark = mode === "dark";
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: {
+      xs: 400,
+      sm: 450,
+    },
+    bgcolor: isDark ? "#121212" : "#fff",
+    color: "white",
+    border: `2px solid ${isDark ? "#030712" : "#2B3040"}`,
+    borderRadius: 2,
+    boxShadow: 24,
+    p: "1.2rem",
+  };
   function handleDelete() {
     deleteFct({
       onSettled: () => {
@@ -48,7 +48,7 @@ export default function ConfirmDelete({ handleClose, deleteFct, isDeleting }) {
               className="text-red-600 size-6"
             />
           </div>
-          <div>
+          <div className="text-black">
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Confirm Delete
             </Typography>
@@ -63,7 +63,7 @@ export default function ConfirmDelete({ handleClose, deleteFct, isDeleting }) {
             </Typography>
           </div>
         </div>
-        <div className="text-right text-white">
+        <div className="text-right text-black">
           <Button
             disabled={isDeleting}
             variation="secondary"

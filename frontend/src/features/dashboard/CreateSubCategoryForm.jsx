@@ -1,4 +1,3 @@
-// import { useAddSubCategory } from "./useAddSubCategory";
 import { Modal } from "@mui/material";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -11,56 +10,146 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useAddSubCategory } from "./useAddSubCategory";
 import { useUploadImage } from "./useUploadImage";
 import { FiMinusCircle } from "react-icons/fi";
+import { useUpdateSubCategory } from "./useUpdateSubCategory";
+import { useEffect } from "react";
 
-function CreateSubCategoryForm({ open, closeModal }) {
-  const isEditSession = false;
+function CreateSubCategoryForm({ open, closeModal, subCategoryToEdit = {} }) {
+  const isEditSession = Boolean(subCategoryToEdit?._id);
+
   const {
     register,
     handleSubmit,
     reset,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: subCategoryToEdit?.name || "",
+      category: subCategoryToEdit?.category
+        ? subCategoryToEdit.category.map((cat) => JSON.stringify(cat))
+        : [],
+    },
+  });
+
+  useEffect(() => {
+    if (subCategoryToEdit?._id) {
+      reset({
+        name: subCategoryToEdit.name,
+        category: subCategoryToEdit.category
+          ? subCategoryToEdit.category.map((cat) => JSON.stringify(cat))
+          : [],
+      });
+    }
+  }, [subCategoryToEdit?._id, reset]);
+
   const { isLoading, categories } = useCategories();
   const { isUploading, uploadImage } = useUploadImage();
   const { isAddingSubCategory, addSubCategory } = useAddSubCategory();
+  const { isUpdatingSubCategory, updateSubCategory } = useUpdateSubCategory();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "category",
   });
+
   function onSubmit(dataForm) {
-    const category =
-      dataForm.category.length > 0 ? JSON.parse(dataForm.category) : [];
-    const formData = new FormData();
-    const image = dataForm.image[0];
-    formData.append("image", image);
+    const selectedCategories =
+      dataForm.category && dataForm.category.length > 0
+        ? dataForm.category.map((cat) => JSON.parse(cat))
+        : [];
+
+    // Common payload fields for create and update
+    const payload = {
+      name: dataForm.name,
+      category: selectedCategories,
+    };
+
+    // Get the image file (if provided)
+    const imageFile = dataForm.image && dataForm.image[0];
+
     if (!isEditSession) {
-      uploadImage(formData, {
-        onSuccess: ({ data: imageData }) => {
-          addSubCategory(
-            {
-              name: dataForm.name,
-              image: imageData.data[0],
-              category,
+      // CREATE FLOW
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        uploadImage(formData, {
+          onSuccess: ({ data: imageData }) => {
+            addSubCategory(
+              {
+                ...payload,
+                image: imageData.data[0],
+              },
+              {
+                onSuccess: () => {
+                  closeModal?.();
+                  reset();
+                },
+                onError: (error) => {
+                  console.error("Failed to add sub category:", error);
+                },
+              }
+            );
+          },
+          onError: (err) => {
+            console.error("Upload failed:", err);
+          },
+        });
+      }
+    } else {
+      // UPDATE FLOW
+      if (imageFile) {
+        // If a new image is provided, upload it first
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        uploadImage(formData, {
+          onSuccess: ({ data: imageData }) => {
+            updateSubCategory(
+              {
+                id: subCategoryToEdit._id,
+                categoryData: {
+                  ...payload,
+                  image: imageData.data[0],
+                },
+              },
+              {
+                onSuccess: () => {
+                  reset();
+                  closeModal?.();
+                },
+                onError: (error) => {
+                  console.error("Failed to update sub category:", error);
+                },
+              }
+            );
+          },
+          onError: (err) => {
+            console.error("Upload failed:", err);
+          },
+        });
+      } else {
+        // No new image provided: use the existing image
+        updateSubCategory(
+          {
+            id: subCategoryToEdit._id,
+            categoryData: {
+              ...payload,
+              image: subCategoryToEdit.image,
             },
-            {
-              onSuccess: () => {
-                closeModal?.();
-                reset();
-                remove();
-              },
-              onError: (error) => {
-                console.error("Failed to add sub category:", error);
-              },
-            }
-          );
-        },
-        onError: (err) => {
-          console.error("Upload failed:", err);
-        },
-      });
+          },
+          {
+            onSuccess: () => {
+              reset();
+              closeModal?.();
+            },
+            onError: (error) => {
+              console.error("Failed to update sub category:", error);
+            },
+          }
+        );
+      }
     }
   }
+
   return (
     <Modal
       open={open}
@@ -75,7 +164,9 @@ function CreateSubCategoryForm({ open, closeModal }) {
         <FormRow label="Sub Category Name" error={errors?.name?.message}>
           <Input
             type="text"
-            disabled={isUploading || isAddingSubCategory}
+            disabled={
+              isUploading || isAddingSubCategory || isUpdatingSubCategory
+            }
             id="name"
             {...register("name", {
               required: "This field is required",
@@ -87,12 +178,21 @@ function CreateSubCategoryForm({ open, closeModal }) {
           <FileInput
             id="categoryImage"
             accept="image/*"
-            disabled={isUploading || isAddingSubCategory}
+            disabled={
+              isUploading || isAddingSubCategory || isUpdatingSubCategory
+            }
             type="file"
             {...register("image", {
-              required: "This field is required",
+              required: !isEditSession ? "This field is required" : false,
             })}
           />
+          {isEditSession && subCategoryToEdit.image && (
+            <img
+              src={subCategoryToEdit.image}
+              alt={subCategoryToEdit.name}
+              className="w-32 h-32 mt-2"
+            />
+          )}
         </FormRow>
 
         {!fields.length ? (
@@ -104,16 +204,16 @@ function CreateSubCategoryForm({ open, closeModal }) {
             <FormRow key={field.id} label={`Category ${index + 1}`}>
               <Select
                 id={`category.${index}`}
-                disabled={isUploading || isAddingSubCategory}
+                disabled={
+                  isUploading || isAddingSubCategory || isUpdatingSubCategory
+                }
                 options={[
                   { value: "0", label: "Select a Category" },
                   ...(categories
-                    ? categories.map((category) => {
-                        return {
-                          value: JSON.stringify(category),
-                          label: category.name,
-                        };
-                      })
+                    ? categories.map((cat) => ({
+                        value: JSON.stringify(cat),
+                        label: cat.name,
+                      }))
                     : []),
                 ]}
                 {...register(`category.${index}`, {
@@ -139,10 +239,8 @@ function CreateSubCategoryForm({ open, closeModal }) {
         <FormRow>
           <Button
             type="button"
-            onClick={() => {
-              append({ category: "" });
-            }}
-            disabled={isAddingSubCategory}
+            onClick={() => append({ category: "" })}
+            disabled={isAddingSubCategory || isUpdatingSubCategory}
           >
             Add Category
           </Button>
@@ -151,15 +249,20 @@ function CreateSubCategoryForm({ open, closeModal }) {
           <Button
             type="reset"
             variation="reset"
-            disabled={isLoading || isAddingSubCategory}
+            disabled={isLoading || isAddingSubCategory || isUpdatingSubCategory}
           >
             Cancel
           </Button>
           <Button
             type="submit"
-            disabled={isLoading || isUploading || isAddingSubCategory}
+            disabled={
+              isLoading ||
+              isUploading ||
+              isAddingSubCategory ||
+              isUpdatingSubCategory
+            }
           >
-            Submit
+            {isEditSession ? "Update" : "Submit"}
           </Button>
         </FormRow>
       </Form>
